@@ -10,6 +10,7 @@
 #import "RCTBridgeModule.h"
 #import "RCTEventDispatcher.h"
 #import "RCTBridge.h"
+#import <Fabric/Fabric.h>
 //#import <Crashlytics/Crashlytics.h>
 #import <TwitterKit/TwitterKit.h>
 
@@ -20,6 +21,8 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
 {
+    [Fabric with:@[[Twitter class]]];
+
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         if (session) {
             NSDictionary *body = @{@"authToken": session.authToken,
@@ -36,6 +39,8 @@ RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
 
 RCT_EXPORT_METHOD(fetchProfile:(RCTResponseSenderBlock)callback)
 {
+    [Fabric with:@[[Twitter class]]];
+
     TWTRAPIClient *client = [[TWTRAPIClient alloc] init];
     TWTRSessionStore *store = [[Twitter sharedInstance] sessionStore];
     
@@ -83,7 +88,9 @@ RCT_EXPORT_METHOD(fetchProfile:(RCTResponseSenderBlock)callback)
     
 }
 
-RCT_EXPORT_METHOD(composeTweet:(NSDictionary *)options :(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(composeTweet:(NSDictionary *)options :(RCTResponseSenderBlock)callback) 
+{
+    [Fabric with:@[[Twitter class]]];
     
     NSString *body = options[@"body"];
     
@@ -112,6 +119,8 @@ RCT_EXPORT_METHOD(composeTweet:(NSDictionary *)options :(RCTResponseSenderBlock)
 
 RCT_EXPORT_METHOD(logOut)
 {
+    [Fabric with:@[[Twitter class]]];
+
     TWTRSessionStore *store = [[Twitter sharedInstance] sessionStore];
     NSString *userID = store.session.userID;
     
